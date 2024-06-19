@@ -51,15 +51,11 @@ time_table_create = ("""
 
 # STAGING TABLES
 
-staging_events_copy = ("""COPY staging_events FROM 's3://udacity-dend/log_data'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::740119474903:role/myRedshiftRole'
-    json 's3://udacity-dend/log_json_path.json' REGION 'us-west-2';
-""").format()
+staging_events_copy = ("""COPY staging_events FROM {} CREDENTIALS {} JSON {} REGION 'us-west-2'
+""").format(config['S3']['log_data'], config['IAM_ROLE']['arn'], config['S3']['log_jsonpath'])
 
-staging_songs_copy = ("""COPY staging_songs FROM 's3://udacity-dend/song_data'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::740119474903:role/myRedshiftRole'
-    JSON 'auto' REGION 'us-west-2';
-""").format()
+staging_songs_copy = ("""COPY staging_songs FROM {} CREDENTIALS {} JSON 'auto' REGION 'us-west-2';
+""").format(config['S3']['song_data'], config['IAM_ROLE']['arn'])
 
 # FINAL TABLES
 
