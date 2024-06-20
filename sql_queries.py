@@ -17,31 +17,31 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 # CREATE TABLES
 
 staging_songs_table_create= ("""
-  CREATE TABLE staging_songs(num_songs int, artist_id varchar, artist_latitude decimal, artist_longitude decimal, artist_location varchar, song_id varchar, artist_name varchar, title varchar, duration decimal, year int)
+  CREATE TABLE staging_songs(num_songs int, artist_id varchar(512), artist_latitude decimal, artist_longitude decimal, artist_location varchar(512), song_id varchar(512), artist_name varchar(512), title varchar(512), duration decimal, year int)
 """)
 
 staging_events_table_create = ("""
-  CREATE TABLE staging_events(artist varchar, auth varchar, firstName varchar, gender char, itemInSession int, lastName varchar, length decimal, level varchar, location varchar, method varchar, page varchar, registration decimal, sessionId int, song varchar, status int, ts bigint, userAgent varchar, userId int)
+  CREATE TABLE staging_events(artist varchar(512), auth varchar(512), firstName varchar(512), gender char, itemInSession int, lastName varchar(512), length decimal, level varchar(512), location varchar(512), method varchar(512), page varchar(512), registration decimal, sessionId int, song varchar(512), status int, ts bigint, userAgent varchar(512), userId int)
 """)
 
 # Create a distribution key because this is a dimension table. Create a sortkey on timestamp because queries against this table will filter on start_time.
 songplay_table_create = ("""
-  CREATE TABLE songplays(songplay_id int IDENTITY(0,1) distkey, start_time timestamp sortkey, user_id varchar, level varchar, song_id varchar, artist_id varchar, session_id int, location varchar, user_agent varchar) DISTSTYLE KEY
+  CREATE TABLE songplays(songplay_id int IDENTITY(0,1) distkey, start_time timestamp sortkey, user_id varchar(512), level varchar(512), song_id varchar(512), artist_id varchar(512), session_id int, location varchar(512), user_agent varchar(512)) DISTSTYLE KEY
 """)
 
 # Do not create a distribution key on this table because it is a fact table. Create a sortkey on user_id to improve run time of joining the fact table (songplay) to this table.
 user_table_create = ("""
-  CREATE TABLE users(user_id varchar primary key not null sortkey, first_name varchar, last_name varchar, gender char, level varchar) DISTSTYLE ALL
+  CREATE TABLE users(user_id varchar(512) primary key not null sortkey, first_name varchar(512), last_name varchar(512), gender char, level varchar(512)) DISTSTYLE ALL
 """)
 
 # Do not create a distribution key because this is a fact table. Create a sortkey on song_id to improve run time of joining the fact table (songplay) to this table.
 song_table_create = ("""
-  CREATE TABLE songs(song_id varchar primary key not null sortkey, title varchar, artist_id varchar, year int, duration decimal) DISTSTYLE ALL
+  CREATE TABLE songs(song_id varchar(512) primary key not null sortkey, title varchar(512), artist_id varchar(512), year int, duration decimal) DISTSTYLE ALL
 """)
 
 # Do not create a distribution key on this table because it is a fact table. Create a sortkey on artist_id to improve run time of joining the fact table (songplay) to this table.
 artist_table_create = ("""
-  CREATE TABLE artists(artist_id varchar primary key not null sortkey, name varchar, location varchar, latitude decimal, longitude decimal) DISTSTYLE ALL
+  CREATE TABLE artists(artist_id varchar(512) primary key not null sortkey, name varchar(512), location varchar(512), latitude decimal, longitude decimal) DISTSTYLE ALL
 """)
 
 # Do not create a distribution key because it is a fact table. Create a sortkey on start_time to improve run time of joining the fact table (songplay) to this table.
